@@ -1,0 +1,14 @@
+<div class="row align-items-start justify-content-around">
+    <div class="col">
+        <h1>Checkout</h1>
+        {{> cookie-summary remove = false}}
+        <a href="/order/thanks" class="btn btn-outline-primary btn-lg">Checkout</a>
+    </div>
+
+
+    <div class="col">
+        {{> cookie-preview}}
+    </div>
+</div>
+
+{{> back-home}}

@@ -1,0 +1,45 @@
+<div class="row row-cols-1 row-cols-sm-2 justify-content-center">
+
+    <h1 class="col-sm-12 pb-3">Don't let them tell you what you can have. Make cookie YOUR OWN way! </h1>
+
+    <div class="col">
+        <h2 class="pb-3">Select base</h2>
+        {{#each availableBases}}
+            <a href="/config/base/{{this.[0]}}" class="btn btn-primary
+            {{#if (chosenBase @root.cookie.base this.[0])}} disabled {{/if}}">
+                <!-- base name - price -->
+                {{this.[0]}} - {{priceFixed this.[1]}}
+            </a>
+        {{/each}}
+
+
+        <h2 class="pt-3 pb-3">Select toppings</h2>
+        {{#each availableToppings}}
+            <a href="/config/topping/{{this.[0]}}" role="button" class="btn btn-primary m-1
+            {{#if (chosen @root.cookie.toppings this.[0])}} disabled {{/if}}">
+                <!-- topping name - price -->
+                {{this.[0]}} - {{priceFixed this.[1]}}
+            </a>
+        {{/each}}
+
+        <hr>
+
+        {{#if cookie.base}}
+            {{> cookie-summary remove = true}}
+            <a href="/order/checkout" class="btn btn-outline-primary btn-lg">Proceed to checkout</a>
+        {{/if}}
+
+    </div>
+
+    <div class="col">
+        {{#if cookie.base}}
+            {{> cookie-preview}}
+        {{else}}
+
+            <div class="w-100 h-100 text-bg-danger text-center d-flex justify-content-center align-items-center display-3">
+                <p>Please select base</p>
+            </div>
+        {{/if}}
+    </div>
+
+</div>

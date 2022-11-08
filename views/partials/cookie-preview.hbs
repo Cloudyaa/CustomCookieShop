@@ -1,0 +1,8 @@
+{{#with cookie}}
+    <div class="cookie-preview" style="background:
+        {{#each toppings}}
+            url('/assets/images/{{this}}.png'),
+        {{/each}}
+            url('/assets/images/base-{{base}}.png')">
+    </div>
+{{/with}}
