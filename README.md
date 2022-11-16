@@ -17,7 +17,8 @@
 
 ## Future
 
-This project will be changed to REST OOP in the future
+Next step in this project is to refactor it to TypeScript.
+Then it will get new design.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

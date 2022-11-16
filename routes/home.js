@@ -1,11 +1,18 @@
 import express from "express";
-import {getCookieSettings} from "../utils/get-cookie-settings.js";
 
-export const homeRouter = express.Router();
+export class HomeRouter {
+    constructor(cookieMakerApp) {
+        this.cmapp = cookieMakerApp
+        this.router = express.Router();
+        this.setRoutes();
+    }
 
-homeRouter
-    .get('/', (req, res) => {
-        const {base, toppings, availableBases, availableToppings, summary} = getCookieSettings(req);
+    setRoutes() {
+        this.router.get('/', this.home);
+    }
+
+    home = (req, res) => {
+        const {base, toppings, availableBases, availableToppings, summary} = this.cmapp.getCookieSettings(req);
         res.render('home', {
             cookie: {
                 base,
@@ -15,4 +22,5 @@ homeRouter
             availableBases,
             availableToppings,
         });
-    })
+    }
+}

@@ -1,11 +1,20 @@
 import express from "express";
-import {getCookieSettings} from "../utils/get-cookie-settings.js";
 
-export const orderRouter = express.Router();
 
-orderRouter
-    .get('/checkout', (req, res) => {
-        const {base, toppings, availableBases, availableToppings, summary} = getCookieSettings(req);
+export class OrderRouter {
+    constructor(cookieMakerApp) {
+        this.cmapp = cookieMakerApp;
+        this.router = express.Router();
+        this.setRoutes();
+    }
+
+    setRoutes() {
+        this.router.get('/checkout', this.checkout);
+        this.router.get('/thanks', this.thanks);
+    }
+
+    checkout = (req, res) => {
+        const {base, toppings, availableBases, availableToppings, summary} = this.cmapp.getCookieSettings(req);
         res.render('order/checkout', {
             cookie: {
                 base,
@@ -15,14 +24,15 @@ orderRouter
             availableBases,
             availableToppings,
         });
-    })
+    };
 
-    .get('/thanks', (req, res) => {
-        const {summary} = getCookieSettings(req);
+    thanks = (req, res) => {
+        const {summary} = this.cmapp.getCookieSettings(req);
         res
             .clearCookie('cookieBase')
             .clearCookie('cookieToppings')
             .render('order/thanks', {
-            summary,
-        });
-    })
+                summary,
+            });
+    };
+}

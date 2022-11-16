@@ -1,16 +1,24 @@
 import express from "express";
-import {COOKIE_BASES, COOKIE_TOPPINGS} from "../data/cookies-data.js";
-import {getToppings} from "../utils/get-toppings.js";
-import {showErrorPage} from "../utils/show-error-page.js";
 
-export const configRouter = express.Router();
+export class ConfigRouter{
+    constructor(cookieMakerApp) {
+        this.cmapp = cookieMakerApp;
+        this.router = express.Router();
+        this.setRoutes();
+    }
 
-configRouter
-    .get('/base/:selected', (req, res) => {
+    setRoutes() {
+        this.router.get('/base/:selected', this.selectBase);
+        this.router.get('/topping/:selected', this.selectTopping);
+        this.router.get('/remove/:selected', this.removeTopping);
+    }
+
+    //arrow function protect us of change of 'this' context
+    selectBase = (req, res) => {
         const {selected} = req.params;
 
-        if (!COOKIE_BASES[selected]) {
-            return showErrorPage(res,`We don't have that kind of base as ${selected}`);
+        if (!this.cmapp.data.COOKIE_BASES[selected]) {
+            return this.cmapp.showErrorPage(res,`We don't have that kind of base as ${selected}`);
         }
 
         res
@@ -18,18 +26,18 @@ configRouter
             .render('config/base-selected', {
                 selected,
             });
-    })
+    };
 
-    .get('/topping/:selected', (req, res) => {
+    selectTopping = (req, res) => {
         const {selected} = req.params;
 
-        if (!COOKIE_TOPPINGS[selected]) {
-            return showErrorPage(res, `We don't have that kind of topping as ${selected}`);
+        if (!this.cmapp.data.COOKIE_TOPPINGS[selected]) {
+            return this.cmapp.showErrorPage(res, `We don't have that kind of topping as ${selected}`);
         }
 
-        const toppings = getToppings(req);
+        const toppings = this.cmapp.getToppings(req);
         if (toppings.includes(selected)) {
-            return showErrorPage(res,`You have already added ${selected}`);
+            return this.cmapp.showErrorPage(res,`You have already added ${selected}`);
         } else toppings.push(selected);
 
 
@@ -38,16 +46,15 @@ configRouter
             .render('config/topping-added', {
                 selected,
             });
-    })
+    };
 
-
-    .get('/remove/:selected', (req, res) => {
+    removeTopping = (req, res) => {
         const {selected} = req.params;
 
-        const oldToppings = getToppings(req);
+        const oldToppings = this.cmapp.getToppings(req);
 
         if(!oldToppings.includes(selected)){
-            return showErrorPage(res,`Cannot remove ${selected} because it is not added to your cookie.`);
+            return this.cmapp.showErrorPage(res,`Cannot remove ${selected} because it is not added to your cookie.`);
         }
 
         const toppings = oldToppings.filter(topping => topping !== selected);
@@ -57,4 +64,5 @@ configRouter
             .render('config/removed', {
                 selected,
             });
-    })
+    };
+}
