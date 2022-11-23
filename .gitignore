@@ -125,4 +125,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-/public/assets/styles/src/
+
+public/assets/styles/src/
